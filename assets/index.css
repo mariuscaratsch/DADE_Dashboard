@@ -1,0 +1,67 @@
+h1 {
+    font-family: 'Caveat', cursive;
+}
+
+h2 {
+    padding: 0.5rem 0;
+    font-family: 'Caveat', cursive; 
+}
+
+h3 {
+    padding-top: 0.5rem;
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+}
+
+.title_wrapper {
+    border: 1px solid black;
+}
+
+.content_wrapper {
+    border: 1px solid black;
+    border-top: hidden;
+    padding: 1rem 0rem;
+}
+
+.filter_wrapper {
+    border-right: 1px solid black;
+    padding-left: 2rem;
+}
+
+.chart_wrapper {
+
+}
+
+.filter_instance_wrapper {
+    border: 1px solid black;
+}
+
+.filter_instance_wrapper_secondary {
+    padding: 0 0.5rem;
+    border: 1px solid black;
+}
+
+.after {
+    margin-bottom: 1rem;
+}
+
+.checklist_content {
+    overflow-y: scroll;
+    max-height: 440px;
+}
+
+.frame {
+    margin: 2rem;
+}
+
+.margin_bottom {
+    margin-bottom: 2rem;
+}
+
+.margin_right {
+    margin-right: 1rem;
+}
+
+.wrapper_padding-bottom {
+    padding-bottom: 1rem;
+}
