@@ -65,6 +65,11 @@ def create_pie_chart():
 # Balkendiagramm horizontal welches die Lebenserwartung der Blumen nach Herkunftskontinent anzeigt
 
 def create_bar_chart():
+
+        # /// Schnitt der Lebenserwartung pro Kontinent berechnen
+
+        df["Herkunftskontinent"] = df["Herkunftskontinent"].str.split(", ")
+        
         bar_chart_fig = px.bar(df, x="Lebenserwartung", y="Herkunftskontinent", orientation='h')
         return bar_chart_fig
 
