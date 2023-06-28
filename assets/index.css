@@ -23,13 +23,10 @@ h3 {
     padding: 1rem 0rem;
 }
 
+/* --- Filter --- */
 .filter_wrapper {
     border-right: 1px solid black;
     padding-left: 2rem;
-}
-
-.chart_wrapper {
-
 }
 
 .filter_instance_wrapper {
@@ -41,6 +38,19 @@ h3 {
     border: 1px solid black;
 }
 
+/* --- Diagramme --- */
+
+.chart_wrapper {
+    border-right: 1px solid black;
+    padding-left: 2rem;
+}
+
+.chart_instance_wrapper {
+    padding-left: 0.5rem;
+    border: 1px solid black;
+}
+
+/* More Stuff */
 .after {
     margin-bottom: 1rem;
 }
