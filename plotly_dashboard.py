@@ -1,16 +1,27 @@
+### ----- Imports ----- ###
+
+### Datenset bearbeiten
 import pandas as pd
+import numpy as np
+
+### Diagramme erstellen
 import plotly.express as px
+
+### Dashbaord erstellen
 from dash import Dash, html, dcc, callback
 from dash.dependencies import Input, Output
 import dash_bootstrap_components as dbc
-import numpy as np
 
-### Load Font
+### Schriftart laden
 external_stylesheets = ["'https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap'"]
 
-### Load Data
-df = pd.read_csv('flower_data.csv')
 
+### ----- Daten einlesen ----- ###
+
+# CSV Datei wird geladen
+flowers_df = pd.read_csv('flower_data.csv')
+
+# Dictionary welches die  Namen der Spalten mit den neuen Name (Deutsch) verknüpft.
 dict = {'name': 'Name',
         'height (cm)': 'Höhe',
         'longevity (years)': 'Lebenserwartung',
@@ -22,15 +33,17 @@ dict = {'name': 'Name',
         'medicine': 'Medizin',
         'average number of petals': 'Durchschnittliche Anzhal Blätter'}
 
-df.rename(columns=dict, inplace=True)
+# Umbenennung der Spalten mithilfe des Dictionaries (Änderungen werden direkt auf das DataFrame angewendet)
+flowers_df.rename(columns=dict, inplace=True)
 
-### Charts
+# Gibt die Anzahl der Blumen zurück
+def number_of_flowers():
+    len(flowers_df)
+    #print( "Anzahl der Blumen",
+        #len(flowers_df))
 
 
-### Widgets
-
-
-### Layout
+### ----- Layout ----- ###
 
 app = Dash(title="Bluemenwelten - The Dashboard", external_stylesheets=[dbc.themes.BOOTSTRAP])
 
@@ -132,5 +145,14 @@ app.layout = html.Div(
         ], className="content_wrapper"),
     ], className="frame")
 
+
+### ----- Diagramme ----- ###
+
+
+
+
+
+
+
 if __name__ == "__main__":
-        app.run_server(debug=True)
+        app.run_server(debug=True, port="8014")
