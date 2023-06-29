@@ -17,6 +17,40 @@ import dash_bootstrap_components as dbc
 external_stylesheets = ["'https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap'"]
 
 
+### ----- Methoden ----- ###
+
+# Zählt die Anzahl an Farben
+def get_color_count(color, dff):
+    values = dff["Farbe"].value_counts()[color]
+    return values
+
+def get_unique_flower_colors(df):
+    colors = df["Farbe"].unique()
+    return colors
+    
+# Holt die Kontinente
+def get_continents(df):
+    continent = df["Herkunftskontinent"].unique()
+    return continent 
+
+# Gibt einen Durchschnittswert zurück (wegen Datensatz)
+def get_expectancy_numeric(expectancy_str):
+    match expectancy_str:
+        case "1-2":
+            return 1.5
+        case "2-3":
+            return 2.5
+        case "5-10":
+            return 7.5
+
+# Holt die durchschinttliceh Lebenserwartung
+def get_continent_expectancy_count(continent, dff):
+    result = dff[dff["Herkunftskontinent"] == continent]
+    result["Lebenserwartung_numeric"] = result.apply(lambda x: get_expectancy_numeric(x["Lebenserwartung"]), axis=1)
+    avg = result["Lebenserwartung_numeric"].mean()
+    return avg
+
+
 ### ----- Daten einlesen ----- ###
 
 # CSV Datei wird geladen
@@ -36,44 +70,27 @@ dict = {'name': 'Name',
 
 # Umbenennung der Spalten mithilfe des Dictionaries (Änderungen werden direkt auf das DataFrame angewendet)
 df.rename(columns=dict, inplace=True)
+df["Herkunftskontinent"] = df["Herkunftskontinent"].str.split(", ")
+df = df.explode("Herkunftskontinent")
 
-# Gibt die Anzahl der Blumen zurück
-def number_of_flowers():
-    len(df)
-    #print( "Anzahl der Blumen",
-        #len(df))
+flower_colors = get_unique_flower_colors(df)
+continents = get_continents(df)
 
-#Startet das App
+#Startet die Dashboard App
 app = Dash(title="Bluemenwelten - The Dashboard", external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 
 ### ----- Statische Diagramme (ohne callback) ----- ###
 
-## Kreisdiagramm nach Herkunftsland
-
-def create_pie_chart():
-
-        df["Herkunftskontinent"] = df["Herkunftskontinent"].str.split(", ")
-        dff = df.explode("Herkunftskontinent")
-
-        origin_counts = df["Herkunftskontinent"].value_counts()
-
-        pie_chart_fig = px.pie(values=origin_counts, names=origin_counts.index, hole=0)
-
-        return pie_chart_fig
-
 ## Balkendiagramm horizontal welches die Lebenserwartung der Blumen nach Herkunftskontinent anzeigt
-
 def create_bar_chart():
 
         # /// Schnitt der Lebenserwartung pro Kontinent berechnen
+        dff = df.copy()
+        dff["Herkunftskontinent"] = dff["Herkunftskontinent"].str.split(", ")
 
-        df["Herkunftskontinent"] = df["Herkunftskontinent"].str.split(", ")
-
-        bar_chart_fig = px.bar(df, x="Lebenserwartung", y="Herkunftskontinent", orientation='h')
+        bar_chart_fig = px.bar(dff, x="Lebenserwartung", y="Herkunftskontinent", orientation='h')
         return bar_chart_fig
-
-       
 
 
 ### ----- Layout ----- ###
@@ -110,7 +127,7 @@ app.layout = html.Div(
                                         ### Auswahl der Farbe/-n
                                         html.Div([
                                                 html.H3("Farbe"),
-                                                dcc.Checklist(id='choose-colors', options=['Weiss', 'Gelb', 'Rot', 'Lila', 'Rosa', 'Blau']) 
+                                                dcc.Checklist(id='choose-colors', options=flower_colors) 
                                         ], className="filter_instance_wrapper_secondary after wrapper_padding-bottom"),
 
                                         ### Auswahl der Grössee/-n
@@ -164,8 +181,15 @@ app.layout = html.Div(
                                                         100: {'label': 'Wüste'}
                                                 }
                                         ),
-                                ], className="filter_instance_wrapper_secondary margin_right"),
-                        ]),
+                                ], className="filter_instance_wrapper_secondary margin_right wrapper_padding-bottom"),
+                        ], className="wrapper_padding-bottom"),
+                        ### Second Row
+                        dbc.Row([
+                                dbc.Col([
+                                        html.H3("Kontinent"),
+                                        dcc.Dropdown(id='choose-continent', options=continents, multi=True),
+                                ], className="filter_instance_wrapper_secondary margin_right wrapper_padding-bottom"),
+                        ], className=""),
                 ], className="filter_wrapper", width=4),
 
 
@@ -182,14 +206,14 @@ app.layout = html.Div(
                                         # Balkendiagramm
                                         dcc.Graph(id='graph-bar-chart-output', figure={})
                                 ], className="chart_instance_wrapper wrapper_padding-bottom"),
-                             ], width=6),
-                             dbc.Col([
-                                  html.Div([
-                                        html.H3("Herkunft der Blumenart"),
+                             ], width=12),
+                             #dbc.Col([
+                                  #html.Div([
+                                        #html.H3("Herkunft der Blumenart"),
                                         # Karte
-                                        dcc.Graph(id='graph-map-output', figure={})
-                                  ], className="chart_instance_wrapper wrapper_padding-bottom"),
-                             ], width=6),
+                                        #dcc.Graph(id='graph-map-output', figure={})
+                                  #], className="chart_instance_wrapper wrapper_padding-bottom"),
+                             #], width=6),
                         ], className="after"),
 
                         ## Zweite Reihe mit drei Diagrammen
@@ -198,7 +222,7 @@ app.layout = html.Div(
                                   html.Div([
                                         html.H3("Blumen nach Herkunftskontinent"),
                                         # Kreisdiagramm
-                                        dcc.Graph(id="pie-chart", figure=create_pie_chart()),
+                                        dcc.Graph(id="pie-chart"),
                                 ], className="chart_instance_wrapper wrapper_padding-bottom"),
                              ], width=4),
                              dbc.Col([
@@ -212,7 +236,7 @@ app.layout = html.Div(
                                   html.Div([
                                         html.H3("Lebenserwartung nach Kontinent"),
                                         # Balkendiagramm mit horizontal
-                                        dcc.Graph(id='bar_chart_fig', figure={})
+                                        dcc.Graph(id='bar_chart_fig')
                                 ], className="chart_instance_wrapper wrapper_padding-bottom"),
                              ], width=4),
                         ]),
@@ -221,59 +245,64 @@ app.layout = html.Div(
     ], className="frame")
 
 
-### ----- Interaktive Diagramme (mit Callback) ----- ###
+### ----- Diagramme ----- ###
 
-## Balkendiagramm vertikal Anzahl der Blumen pro jeweiliger Farbe
-
+## Balkendiagramm vertikal Anzahl der Blumen pro jeweiliger Farbe graph-bar-chart-output
 @app.callback (
-      Output(component_id='graph-bar-chart-output', component_property='figure'),
-      Input(component_id='choose-flowers', component_property='value'),
-      #Input(component_id='choose-colors', component_property='value'),
-      #Input(component_id='choose-height', component_property='value'),
-      #Input(component_id='choose-life-expectancy', component_property='value'),
-      #Input(component_id='choose-climate', component_property='value'),
+      Output('graph-bar-chart-output', 'figure'),
+      Input('choose-flowers', 'value'),
+      Input('choose-colors', 'value'))
 
-      # Beim Laden des Dashboards wird der callback nicht getriggert
-      #prevent_initil_call=True
-)
+def update_graph_bar_chart(flower_names, flower_colors):
+        dff = df.copy()
+        if flower_names != None and len(flower_names) > 0:
+            dff = dff[dff["Name"].isin(flower_names)]
+       
+        if flower_colors != None and len(flower_colors) > 0:
+            dff = dff[dff["Farbe"].isin(flower_colors)]
 
-def update_graph_bar_chart(val_chosen):
-            
-        #Problem: Auf der y-Achse will ich die Anzahl der Blumen // Auf der x-Achse sollen nur die Farben der ausgewählten Blumen angezeigt werden
-
-        print(f" user chose: {val_chosen}")
-        print (type(val_chosen))
-
-        ##Hier läuft was schief 
-        #dff = df[df["Name"].isin(val_chosen)]
-        fig = px.bar(df, x="Farbe", y="Name")
-        
+        dff_bar_chart = pd.DataFrame()
+        dff_bar_chart["Farbe"] = dff["Farbe"].unique()
+        dff_bar_chart["Anzahl"] = dff_bar_chart.apply(lambda x: get_color_count(x["Farbe"], dff), axis=1)
+        fig = px.bar(dff_bar_chart, x="Farbe", y="Anzahl")
         return fig
 
+## Karte mit den Herkunftskontinenten der Blumen
+# Die Karte muss leider aus dem Dashbard entfernt werden, da es keine Möglichkeit gab die Kontinente zu markieren
 
-## Karte mit den Herkunftskontinenten der Blumen 
-
-@app.callback (
-      Output(component_id='graph-map-output', component_property='figure'),
-      Input(component_id='choose-flowers', component_property='value'),
+#@app.callback (
+      #Output(component_id='graph-map-output', component_property='figure'),
+      #Input(component_id='choose-flowers', component_property='value'),
 
       # Beim Laden des Dashboards wird der callback nicht getriggert
       #prevent_initil_call=True
-)
+#)
 
-def update_graph_map(val_chosen):
+#def update_graph_map(val_chosen):
 
         #print(f" user chose: {val_chosen}")
-        fig = go.Figure(go.Scattergeo())
-        fig.update_layout(height=300, margin={"r":0,"t":0,"l":0,"b":0})
-        return fig
+        #fig = go.Figure(go.Scattergeo())
+        #fig.update_layout(height=300, margin={"r":0,"t":0,"l":0,"b":0})
+        #return fig
 
+## Kreisdriagramm pie-chart
+@app.callback(Output("pie-chart", "figure"), Input("choose-continent", "value"))
 
-## Scatter Diagramm welches die Höhe und Anzahl von Blättern einer Pflanze anzeigt
+def update_pie_chart(continents):
+        dff = df.copy()
+        if continents != None and len(continents) > 0:
+            dff = dff[dff["Herkunftskontinent"].isin(continents)]
 
+        origin_counts = dff["Herkunftskontinent"].value_counts()
+        pie_chart_fig = px.pie(values=origin_counts, names=origin_counts.index, hole=0)
+        return pie_chart_fig
+
+## Scatter Diagramm welches die Höhe und Anzahl von Blättern einer Pflanze anzeigt scatter-chart-output
 @ app.callback (
-       Output(component_id='scatter-chart-output', component_property='figure'),
-       [Input(component_id='choose-flowers', component_property='value')]
+       Output('scatter-chart-output', 'figure'),
+       Input('choose-flowers', 'value'),
+       #Input('choose-height', 'value')
+
 )
 
 def update_graph_scatter(val_chosen):
@@ -284,6 +313,22 @@ def update_graph_scatter(val_chosen):
         fig = px.scatter(df, x="Durchschnittliche Anzhal Blätter", y="Höhe")
         return fig
 
+## Balkendiagramm das die Lebenserwartung in Bezug zum Herkunftskontinent anzeigt bar_chart_fig
+@app.callback (
+      Output('bar_chart_fig', 'figure'),
+      Input('choose-continent', 'value'))
+
+def update_bar_chart_fig(continents):
+        dff = df.copy()
+        if continents != None and len(continents) > 0:
+            dff = dff[dff["Herkunftskontinent"].isin(continents)]
+        
+        dff_bar_chart = pd.DataFrame()
+        dff_bar_chart["Herkunftskontinent"] = dff["Herkunftskontinent"].unique()
+        dff_bar_chart["Lebenserwartung"] = dff_bar_chart.apply(lambda x: get_continent_expectancy_count(x["Herkunftskontinent"], dff), axis=1)
+
+        fig = px.bar(dff_bar_chart, x="Lebenserwartung", y="Herkunftskontinent", orientation="h")
+        return fig
 
 if __name__ == "__main__":
         app.run_server(debug=True, port="8014")
