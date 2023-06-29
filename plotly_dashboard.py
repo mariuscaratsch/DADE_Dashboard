@@ -49,7 +49,7 @@ app = Dash(title="Bluemenwelten - The Dashboard", external_stylesheets=[dbc.them
 
 ### ----- Statische Diagramme (ohne callback) ----- ###
 
-# Kreisdiagramm nach Herkunftsland
+## Kreisdiagramm nach Herkunftsland
 
 def create_pie_chart():
 
@@ -62,14 +62,14 @@ def create_pie_chart():
 
         return pie_chart_fig
 
-# Balkendiagramm horizontal welches die Lebenserwartung der Blumen nach Herkunftskontinent anzeigt
+## Balkendiagramm horizontal welches die Lebenserwartung der Blumen nach Herkunftskontinent anzeigt
 
 def create_bar_chart():
 
         # /// Schnitt der Lebenserwartung pro Kontinent berechnen
 
         df["Herkunftskontinent"] = df["Herkunftskontinent"].str.split(", ")
-        
+
         bar_chart_fig = px.bar(df, x="Lebenserwartung", y="Herkunftskontinent", orientation='h')
         return bar_chart_fig
 
@@ -223,11 +223,15 @@ app.layout = html.Div(
 
 ### ----- Interaktive Diagramme (mit Callback) ----- ###
 
-# Balkendiagramm vertikal Anzahl der Blumen pro jeweiliger Farbe
+## Balkendiagramm vertikal Anzahl der Blumen pro jeweiliger Farbe
 
 @app.callback (
       Output(component_id='graph-bar-chart-output', component_property='figure'),
-      [Input(component_id='choose-flowers', component_property='value')],
+      Input(component_id='choose-flowers', component_property='value'),
+      #Input(component_id='choose-colors', component_property='value'),
+      #Input(component_id='choose-height', component_property='value'),
+      #Input(component_id='choose-life-expectancy', component_property='value'),
+      #Input(component_id='choose-climate', component_property='value'),
 
       # Beim Laden des Dashboards wird der callback nicht getriggert
       #prevent_initil_call=True
@@ -246,11 +250,12 @@ def update_graph_bar_chart(val_chosen):
         
         return fig
 
-# Karte mit den Herkunftskontinenten der Blumen 
+
+## Karte mit den Herkunftskontinenten der Blumen 
 
 @app.callback (
       Output(component_id='graph-map-output', component_property='figure'),
-      [Input(component_id='choose-flowers', component_property='value')],
+      Input(component_id='choose-flowers', component_property='value'),
 
       # Beim Laden des Dashboards wird der callback nicht getriggert
       #prevent_initil_call=True
@@ -263,7 +268,8 @@ def update_graph_map(val_chosen):
         fig.update_layout(height=300, margin={"r":0,"t":0,"l":0,"b":0})
         return fig
 
-# Scatter Diagramm welches die Höhe und Anzahl von Blättern einer Pflanze anzeigt
+
+## Scatter Diagramm welches die Höhe und Anzahl von Blättern einer Pflanze anzeigt
 
 @ app.callback (
        Output(component_id='scatter-chart-output', component_property='figure'),
