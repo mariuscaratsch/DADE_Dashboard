@@ -1,6 +1,6 @@
 # Was noch nicht funktioniert:
 
-# - Filter Lebenserwartun gChart 4
+# - Filter Lebenserwartung Chart 4
 # - Filter Höhe und durchschnittliche Anzahl Blätter Chart 3
 # - Filter Klima, höhe und Lebenserwartung in Chart einbauen
 
@@ -383,7 +383,7 @@ def update_pie_chart(continents):
             dff = dff[dff["Herkunftskontinent"].isin(continents)]
 
         origin_counts = dff["Herkunftskontinent"].value_counts()
-        pie_chart_fig = px.pie(values=origin_counts, names=origin_counts.index, hole=0)
+        pie_chart_fig = px.pie(values=origin_counts, names=origin_counts.index, hole=0, showlegend=False)
         return pie_chart_fig
 
 ## Scatter Diagramm welches die Höhe und Anzahl von Blättern einer Pflanze anzeigt scatter-chart-output
