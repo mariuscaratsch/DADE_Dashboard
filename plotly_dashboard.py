@@ -311,21 +311,21 @@ app.layout = html.Div(
                                         # Kreisdiagramm
                                         dcc.Graph(id="pie-chart"),
                                 ], className="chart_instance_wrapper wrapper_padding-bottom"),
-                             ], width=4),
+                             ], lg=4),
                              dbc.Col([
                                   html.Div([
                                         html.H3("Höhe der Blumen und Blätter"),
                                         # Scatter
                                         dcc.Graph(id="scatter-chart-output", figure={})
                                 ], className="chart_instance_wrapper wrapper_padding-bottom"),
-                             ], width=4),
+                             ], lg=4),
                              dbc.Col([
                                   html.Div([
                                         html.H3("Lebenserwartung nach Kontinent"),
                                         # Balkendiagramm mit horizontal
                                         dcc.Graph(id='bar_chart_fig')
                                 ], className="chart_instance_wrapper wrapper_padding-bottom"),
-                             ], width=4),
+                             ], lg=4),
                         ]),
                 ], className="chart_wrapper", width=8)
         ], className="content_wrapper"),

@@ -52,6 +52,12 @@ h3 {
     border: 1px solid black;
 }
 
+/* @media (max-width: 992px) {
+    .chart_instance_wrapper {
+        padding-left: 0rem;
+        padding-bottom: 100rem;
+    }} */
+
 /* More Stuff */
 .after {
     margin-bottom: 1rem;
