@@ -123,7 +123,7 @@ for index, climate in enumerate(climates):
     marks[index] = {'label': climate}
 
 # Startet die Dashboard App
-app = Dash(title="Bluemenwelten - The Dashboard",
+app = Dash(__name__, title="Bluemenwelten - The Dashboard",
            external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 server=app.server
