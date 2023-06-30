@@ -1,6 +1,6 @@
 # Was noch nicht funktioniert:
 
-# - Filter Lebenserwartun Chart 4
+# - Filter Lebenserwartun gChart 4
 # - Filter Höhe und durchschnittliche Anzahl Blätter Chart 3
 # - Filter Klima, höhe und Lebenserwartung in Chart einbauen
 
@@ -225,28 +225,28 @@ app.layout = html.Div(
                                                                 {
                                                                 "label": [
                                                                         html.Img(src="/assets/images/flower.png", style={"height": 20}),
-                                                                        html.Span("10-29", style={"font-size": 15, "padding-left": 10}),
+                                                                        html.Span("10-69", style={"font-size": 15, "padding-left": 10}),
                                                                 ],
-                                                                "value": "10-29",
+                                                                "value": "10-69",
                                                                 },
                                                                 {
                                                                 "label": [
                                                                         html.Img(src="/assets/images/flower.png", style={"height": 40}),
-                                                                        html.Span("30-69", style={"font-size": 15, "padding-left": 10}),
+                                                                        html.Span("70-129", style={"font-size": 15, "padding-left": 10}),
                                                                 ],
-                                                                "value": "30-69",
+                                                                "value": "70-129",
                                                                 },
                                                                 {
                                                                 "label": [
                                                                         html.Img(src="/assets/images/flower.png", style={"height": 60}),
-                                                                        html.Span("70-100", style={"font-size": 15, "padding-left": 10,"display": "flex"}),
-                                                                ],
-                                                                "value": "70-100",
+                                                                        html.Span("130-200", style={"font-size": 15, "padding-left": 10,"display": "flex"}),
+                                                                ],      
+                                                                "value": "130-200",
                                                                 },
                                                         ],
-                                                        labelStyle={"display": "flex", "align-items": "center"},
+                                                        labelStyle={"display": "flex", "align-items": "center", "padding-bottom": 20},
                                                 )  
-                                        ], className="filter_instance_wrapper_secondary wrapper_padding-bottom after"),
+                                        ], className="filter_instance_wrapper_secondary after"),
 
                                         ### Auswahl der Lebenserwartung/-en
                                         html.Div([
@@ -338,7 +338,8 @@ app.layout = html.Div(
 @app.callback (
       Output('graph-bar-chart-output', 'figure'),
       Input('choose-flowers', 'value'),
-      Input('choose-colors', 'value'))
+      Input('choose-colors', 'value'),)
+      #Input('choose-height', 'value'))
 
 def update_graph_bar_chart(flower_names, flower_colors):
         dff = df.copy()
@@ -373,7 +374,8 @@ def update_graph_bar_chart(flower_names, flower_colors):
         #return fig
 
 ## Kreisdriagramm pie-chart
-@app.callback(Output("pie-chart", "figure"), Input("choose-continent", "value"))
+@app.callback(Output("pie-chart", "figure"),
+              Input("choose-continent", "value"))
 
 def update_pie_chart(continents):
         dff = df.copy()
