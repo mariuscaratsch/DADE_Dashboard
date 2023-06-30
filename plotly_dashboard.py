@@ -169,7 +169,7 @@ app.layout = html.Div(
                             html.H3("Blumenart"),
                             dcc.Checklist(id='choose-flowers', options=['Rose', 'Tulip', 'Daisy', 'Sunflower', 'Orchid', 'Jasmine', 'Lavender', 'Marigold', 'Chrysanthemum', 'Daffodil', 'Freesia', 'Iris', 'Lily', 'Peony', 'Gardenia', 'Gladiolus', 'Hyacinth', 'Lilac', 'Narcissus', 'Poppy', 'Snapdragon', 'Violet', 'Zinnia', 'Alstroemeria', 'Anemone', 'Asters', 'Calendula', 'Carnation', 'Cosmos', 'Dandelion', 'Delphinium', 'Foxglove', 'Ylang-ylang', 'Tuberose', 'Honeysuckle', 'Frangipani', 'Heliotrope', 'Geranium',
                                           'Clove', 'Cumin', 'Cactus', 'Venus flytrap', 'Pitcher plant', 'Sundew', 'Bladderwort', 'Butterwort', 'Cobra lily', 'Cobra plant', 'Corkscrew plant', 'Larkspur', 'Monkshood', 'Digitalis', 'Echinops', 'Hollyhock', 'Verbena', 'Violets', 'Pansies', 'Johnny jump ups', 'Violas', 'Forget-me-nots', 'Sweet Williams', 'Primroses', 'Cyclamen', 'Dwarf iris', 'Bluebell', 'Daffodil', 'Crocus', 'Hyacinth', 'Iris reticulata', 'Chionodoxa', 'Anemone', 'Scilla'], className="checklist_content"),
-                        ], className="filter_instance_wrapper"),
+                        ], lg=6, className="filter_instance_wrapper"),
 
 
                         dbc.Col([
@@ -184,7 +184,8 @@ app.layout = html.Div(
                             # Auswahl der Grössee/-n
                             html.Div([
                                 html.H3("Höhe"),
-                                dcc.Dropdown(id='choose-height', options=heights, multi=True, value=heights, className="filter_instance_wrapper_secondary after")]),
+                                dcc.Dropdown(id='choose-height', options=heights, multi=True, value=heights, className="after")
+                            ], className="filter_instance_wrapper_secondary after wrapper_padding-bottom"),
 
                             # Auswahl der Lebenserwartung/-en
                             html.Div([
@@ -192,8 +193,8 @@ app.layout = html.Div(
                                 dcc.Dropdown(
                                     id='choose-life-expectancy', options=expectancies, multi=True, value=expectancies),
                             ], className="filter_instance_wrapper_secondary wrapper_padding-bottom"),
-                        ]),
-                    ], className="margin_bottom"),
+                        ], lg=6 ),
+                    ], className="margin_bottom margin_fix"),
 
                     # Second Row
                     dbc.Row([
@@ -219,7 +220,7 @@ app.layout = html.Div(
                 dbc.Col([
                     html.H2("Diagramme"),
 
-                    # Erste Reihe mit zwei Diagrammen
+                    # Erste Reihe für Diagramme
                     dbc.Row([
                         dbc.Col([
                             html.Div([
@@ -242,26 +243,8 @@ app.layout = html.Div(
                         # ], width=6),
                     ], className="after"),
 
-                    # Zweite Reihe mit drei Diagrammen
+                    # Zweite Riehe für Diagramme
                     dbc.Row([
-                        dbc.Col([
-                            html.Div([
-                                html.H3("Blumen nach Herkunftskontinent"),
-                                # Kreisdiagramm
-                                dbc.Badge("Filter Kontinent", color="primary", style={
-                                          "marginRight": "1rem"}),
-                                dcc.Graph(id="pie-chart"),
-                            ], className="chart_instance_wrapper wrapper_padding-bottom"),
-                        ], lg=4),
-                        dbc.Col([
-                            html.Div([
-                                html.H3("Höhe der Blumen und Blätter"),
-                                # Scatter
-                                dbc.Badge("Filter Höhe", color="primary", style={
-                                          "marginRight": "1rem"}),
-                                dcc.Graph(id="scatter-chart-output", figure={})
-                            ], className="chart_instance_wrapper wrapper_padding-bottom"),
-                        ], lg=4),
                         dbc.Col([
                             html.Div([
                                 html.H3("Lebenserwartung nach Kontinent"),
@@ -274,7 +257,29 @@ app.layout = html.Div(
                                 # Balkendiagramm mit horizontal
                                 dcc.Graph(id='bar_chart_fig')
                             ], className="chart_instance_wrapper wrapper_padding-bottom"),
-                        ], lg=4),
+                        ], lg=12),
+                    ], className="after"),
+
+                    # Dritte Reihe für Diagramme
+                    dbc.Row([
+                        dbc.Col([
+                            html.Div([
+                                html.H3("Blumen nach Herkunftskontinent"),
+                                # Kreisdiagramm
+                                dbc.Badge("Filter Kontinent", color="primary", style={
+                                          "marginRight": "1rem"}),
+                                dcc.Graph(id="pie-chart"),
+                            ], className="chart_instance_wrapper wrapper_padding-bottom padding_small-screens"),
+                        ], lg=6),
+                        dbc.Col([
+                            html.Div([
+                                html.H3("Höhe der Blumen und Blätter"),
+                                # Scatter
+                                dbc.Badge("Filter Höhe", color="primary", style={
+                                          "marginRight": "1rem"}),
+                                dcc.Graph(id="scatter-chart-output", figure={})
+                            ], className="chart_instance_wrapper wrapper_padding-bottom"),
+                        ], lg=6),
                     ]),
                 ], className="chart_wrapper", width=8)
                 ], className="content_wrapper"),
