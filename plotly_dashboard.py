@@ -126,6 +126,7 @@ for index, climate in enumerate(climates):
 app = Dash(title="Bluemenwelten - The Dashboard",
            external_stylesheets=[dbc.themes.BOOTSTRAP])
 
+server=app.server
 
 ### ----- Statische Diagramme (ohne callback) ----- ###
 
