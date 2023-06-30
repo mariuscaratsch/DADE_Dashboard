@@ -1,3 +1,9 @@
+# Was noch nicht funktioniert:
+
+# - Filter Lebenserwartun Chart 4
+# - Filter Höhe und durchschnittliche Anzahl Blätter Chart 3
+# - Filter Klima, höhe und Lebenserwartung in Chart einbauen
+
 ### ----- Imports ----- ###
 
 ### Datenset bearbeiten
@@ -33,7 +39,7 @@ def get_continents(df):
     continent = df["Herkunftskontinent"].unique()
     return continent 
 
-# Gibt einen Durchschnittswert zurück (wegen Datensatz)
+# Gibt einen Durchschnittswert der Lebenserwartung zurück (wegen Datensatz)
 def get_expectancy_numeric(expectancy_str):
     match expectancy_str:
         case "1-2":
@@ -42,14 +48,95 @@ def get_expectancy_numeric(expectancy_str):
             return 2.5
         case "5-10":
             return 7.5
-
-# Holt die durchschinttliceh Lebenserwartung
+         
+# Holt die durchschinttliche Lebenserwartung
 def get_continent_expectancy_count(continent, dff):
     result = dff[dff["Herkunftskontinent"] == continent]
     result["Lebenserwartung_numeric"] = result.apply(lambda x: get_expectancy_numeric(x["Lebenserwartung"]), axis=1)
     avg = result["Lebenserwartung_numeric"].mean()
     return avg
+         
+# Gibt einen Durchschnittswert der durchschnittlichen Anzahl Blätter zurück (wegen Datensatz)
+def get_numberofpetals_numeric(numberofpetals_str):
+     match numberofpetals_str:
+        case  "10-20":
+            return 15
+        case  "3-10":
+            return 6.5  
+        case  "3-50":
+            return 26.5          
+        case  "3-6":
+            return 4.5
+        case  "3-7":
+            return 4.75
+        case  "3-8":
+            return 5.5
+        case  "4-10":
+            return 7
+        case  "4-6":
+            return 5
+        case  "5-10":
+            return 7.5
+        case  "5-11":
+            return 8
+        case  "5-7":
+            return 6       
+        case  "5-8":
+            return 6.5
+        case  "5-9":
+            return 7     
+        case  "Variable":
+            return 10                  
 
+# Holt die durchschinttliche Anzahl von Blättern
+def get_flower_numberofpetals_count(height, dff):
+    result = dff[dff["Höhe"] == height]
+    result["DurchschnittlicheAnzahlBlätter_numeric"] = result.apply(lambda x: get_flower_numberofpetals_count(x["Durchschnittliche Anzhal Blätter"]), axis=1)
+    avg = result["DurchschnittlicheAnzahlBlätter_numeric"].mean()
+    return avg
+
+# Gibt einen Durchschnittswert der Höhe zurück (wegen Datensatz)
+def get_height_numeric(height_str):
+     match height_str:
+        case  "100-200":
+            return 150
+        case  "100-300":
+            return 200 
+        case  "10-20":
+            return 15          
+        case  "20-100":
+            return 60
+        case  "20-300":
+            return 160
+        case  "20-40":
+            return 30
+        case  "20-60":
+            return 40
+        case  "20-70":
+            return 45
+        case  "20-80":
+            return 50
+        case  "30-100":
+            return 65
+        case  "30-60":
+            return 45       
+        case  "30-90":
+            return 60
+        case  "50-100":
+            return 75     
+        case  "50-300":
+            return 175   
+        case  "60-150":
+            return 105   
+        case  "60-180":
+            return 120   
+
+# Holt die durchschinttliche Höhe
+def get_height_count(numberofpetals, dff):
+    result = dff[dff["Durchschnittliche Anzhal Blätter"] == numberofpetals]
+    result["Höhe_numeric"] = result.apply(lambda x: get_height_numeric(x["Höhe"]), axis=1)
+    avg = result["Höhe_numeric"].mean()
+    return avg
 
 ### ----- Daten einlesen ----- ###
 
@@ -164,7 +251,7 @@ app.layout = html.Div(
                                         ### Auswahl der Lebenserwartung/-en
                                         html.Div([
                                                         html.H3("Lebenserwartung"),
-                                                        dcc.Dropdown(id='choose-life-expectancy', options=['1-2', '2-3', '5-10']),
+                                                        dcc.Dropdown(id='choose-life-expectancy', options=['1.5', '2.5', '7.5']),
                                         ], className="filter_instance_wrapper_secondary wrapper_padding-bottom"),
                                 ]),
                         ], className="margin_bottom"),
